@@ -19,11 +19,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("superAdmin").password(passwordEncoder().encode("admin")).roles("SUPER_ADMIN").authorities("READ_ALL_PRODUCT", "ADD_PRODUCT", "EDIT_PRODUCT", "DELETE_PRODUCT", "READ_ONE_PRODUCT")
+                .withUser("superAdmin").password(passwordEncoder().encode("admin")).roles("SUPER_ADMIN")
                 .and()
-                .withUser("moderator").password(passwordEncoder().encode("moderator")).roles("MODERATOR").authorities("READ_ALL_PRODUCT", "ADD_PRODUCT", "EDIT_PRODUCT", "READ_ONE_PRODUCT")
+                .withUser("moderator").password(passwordEncoder().encode("moderator")).roles("MODERATOR")
                 .and()
-                .withUser("operator").password(passwordEncoder().encode("operator")).roles("OPERATOR").authorities("READ_ALL_PRODUCT", "ADD_PRODUCT", "READ_ONE_PRODUCT");
+                .withUser("operator").password(passwordEncoder().encode("operator")).roles("OPERATOR");
     }
 
     @Override
@@ -31,9 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/api/**").hasAuthority("DELETE_PRODUCT")
-                .antMatchers(HttpMethod.PUT, "/api/**").hasAuthority("EDIT_PRODUCT")
-                .antMatchers("/api/**").hasAnyAuthority("READ_ALL_PRODUCT", "ADD_PRODUCT", "EDIT_PRODUCT", "DELETE_PRODUCT", "READ_ONE_PRODUCT")
                 .anyRequest()
                 .authenticated()
                 .and()
